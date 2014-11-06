@@ -35,4 +35,9 @@ public class ScramblePanel extends RelativeLayout
 	{
 		mCurScrambleTextView.setText("R U' D' R2 D' R D B2 L B2 D' F B2 D2 R2 F' D2 F' L2");
 	}
+	
+	public String getScrambleStr()
+	{
+		return mCurScrambleTextView.getText().toString();
+	}
 }

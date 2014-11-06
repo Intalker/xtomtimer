@@ -11,6 +11,8 @@ import com.intalker.xtomtimer.R;
 import com.intalker.xtomtimer.config.ColorConfig;
 import com.intalker.xtomtimer.config.LayoutConfig;
 import com.intalker.xtomtimer.config.TimeConfig;
+import com.intalker.xtomtimer.data.ScoreData;
+import com.intalker.xtomtimer.data.SessionData;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -52,6 +54,11 @@ public class TimerContent extends RelativeLayout
 	private ScramblePanel mScramblePanel = null;
 
 	private boolean mHasPressedLongEnough = false;
+	
+	private SessionOverlapView mCurSessionPanel = null;
+	
+	private SessionData mCurSessionData = null;
+	private ScoreData mCurScoreData = null;
 
 	public TimerContent(Context context)
 	{
@@ -60,10 +67,15 @@ public class TimerContent extends RelativeLayout
 		createTimer();
 
 		addListeners();
+		
+		mCurSessionData = new SessionData();
 	}
 
 	private void createUI(Context context)
 	{
+		mCurSessionPanel = new SessionOverlapView(context);
+		this.addView(mCurSessionPanel);
+		
 		mTickTextView = new SpecTextView(context);
 		mTickTextView.setText(R.string.ready);
 		mTickTextView.setTextSize(72.0f);
@@ -142,6 +154,7 @@ public class TimerContent extends RelativeLayout
 									mHasPressedLongEnough = false;
 									startTicking();
 									mCurrentStatus = STATUS_RUNNING;
+									mCurScoreData = null;
 								}
 								break;
 							case STATUS_RUNNING:
@@ -397,10 +410,27 @@ public class TimerContent extends RelativeLayout
 	
 	public void finishCurTicking()
 	{
+		float score = Float.parseFloat(mTickTextView.getText().toString());
+		String scramble = mScramblePanel.getScrambleStr();
+		mCurScoreData = new ScoreData(score, scramble);
 		mCurrentStatus = STATUS_FINISHED;
 		mTickTimer.cancel();
 		animateScoreTextView(mTickTextView.getY(),
 				LayoutConfig.getScoreFinishTopMargin(),
 				96f, false);
+		
+		mCurSessionPanel.updateView(mCurSessionData);
+	}
+	
+	public void recordScore(boolean add2)
+	{
+		if (null != mCurScoreData)
+		{
+			if (add2)
+			{
+				mCurScoreData.add2();
+			}
+			mCurSessionData.addScore(mCurScoreData);
+		}
 	}
 }

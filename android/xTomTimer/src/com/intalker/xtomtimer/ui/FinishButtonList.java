@@ -52,6 +52,7 @@ public class FinishButtonList extends AnimVertViewList
 			@Override
 			public void onClick(View v)
 			{
+				MainActivity.getInstance().getContent().recordScore(false);
 				MainActivity.getInstance().getContent().resetToReady();
 			}
 		});
@@ -61,6 +62,7 @@ public class FinishButtonList extends AnimVertViewList
 			@Override
 			public void onClick(View v)
 			{
+				MainActivity.getInstance().getContent().recordScore(true);
 				MainActivity.getInstance().getContent().resetToReady();
 			}
 		});
