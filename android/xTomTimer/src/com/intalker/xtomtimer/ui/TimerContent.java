@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.intalker.util.DensityAdaptor;
+import com.intalker.widget.FlowLayout;
 import com.intalker.widget.SpecTextView;
 import com.intalker.xtomtimer.AnimationUtil;
 import com.intalker.xtomtimer.R;
@@ -55,7 +56,7 @@ public class TimerContent extends RelativeLayout
 
 	private boolean mHasPressedLongEnough = false;
 
-	private SessionOverlapView mCurSessionPanel = null;
+	private SessionOverView mCurSessionPanel = null;
 
 	private SessionData mCurSessionData = null;
 	private ScoreData mCurScoreData = null;
@@ -75,8 +76,14 @@ public class TimerContent extends RelativeLayout
 
 	private void createUI(Context context)
 	{
-		mCurSessionPanel = new SessionOverlapView(context);
-		this.addView(mCurSessionPanel);
+		mCurSessionPanel = new SessionOverView(context);
+		RelativeLayout.LayoutParams sessionPanelLP = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		sessionPanelLP.leftMargin = sessionPanelLP.rightMargin = sessionPanelLP.topMargin = LayoutConfig
+				.getLargeMargin();
+		this.addView(mCurSessionPanel, sessionPanelLP);
+		mCurSessionPanel.setVisibility(View.GONE);
 
 		mTickTextView = new SpecTextView(context);
 		mTickTextView.setText(R.string.ready);
@@ -104,6 +111,13 @@ public class TimerContent extends RelativeLayout
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		scramblePanelLP.topMargin = LayoutConfig.getLargeMargin();
 		this.addView(mScramblePanel, scramblePanelLP);
+		
+//		FlowLayout fl = new FlowLayout(context);
+//		for(int i = 0; i < 50; ++i)
+//		{
+//			fl.addView(new ScoreView(context, new ScoreData(i, "")));
+//		}
+//		this.addView(fl);
 	}
 
 	private void addListeners()
@@ -289,6 +303,7 @@ public class TimerContent extends RelativeLayout
 		if (reset)
 		{
 			AnimationUtil.fadeOutFinishButtons(mFinishButtonList);
+			AnimationUtil.fadeOutFinishButtons(mCurSessionPanel);
 			animationSet.addListener(new AnimatorListener()
 			{
 
@@ -388,6 +403,7 @@ public class TimerContent extends RelativeLayout
 				public void onAnimationEnd(Animator animation)
 				{
 					AnimationUtil.fadeInFinishButtons(mFinishButtonList);
+					AnimationUtil.fadeInFinishButtons(mCurSessionPanel);
 				}
 
 				@Override
@@ -425,18 +441,22 @@ public class TimerContent extends RelativeLayout
 		mTickTimer.cancel();
 		animateScoreTextView(mTickTextView.getY(),
 				LayoutConfig.getScoreFinishTopMargin(), 96f, false);
-		recordScore(false);
+		recordScore();
 		mCurSessionPanel.updateView(mCurSessionData);
 	}
-
-	public void recordScore(boolean add2)
+	
+	public void markAsAdd2()
 	{
 		if (null != mCurScoreData)
 		{
-			if (add2)
-			{
-				mCurScoreData.add2();
-			}
+			mCurScoreData.add2();
+		}
+	}
+
+	public void recordScore()
+	{
+		if (null != mCurScoreData)
+		{
 			mCurSessionData.addScore(mCurScoreData);
 		}
 	}

@@ -17,8 +17,9 @@ public class ScoreView extends SpecTextView
 	public ScoreView(Context context, ScoreData data)
 	{
 		super(context);
-		this.setBackgroundResource(R.drawable.score_bg);
+		this.setBackgroundResource(R.drawable.roundcorner_bg);
 		this.setGravity(Gravity.CENTER);
+		this.setTextSize(22f);
 		mData = data;
 		updateUI();
 	}

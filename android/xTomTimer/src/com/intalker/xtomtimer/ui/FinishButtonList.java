@@ -24,9 +24,9 @@ public class FinishButtonList extends AnimVertViewList
 
 	private void createButtons(Context context)
 	{
-		mConfirmButton = new SimpleButton(context);
-		mConfirmButton.setText(R.string.confirm);
-		this.appendView(mConfirmButton, true);
+//		mConfirmButton = new SimpleButton(context);
+//		mConfirmButton.setText(R.string.confirm);
+//		this.appendView(mConfirmButton, true);
 		
 		mAdd2Button = new SimpleButton(context);
 		mAdd2Button.setText(R.string.add2);
@@ -47,22 +47,22 @@ public class FinishButtonList extends AnimVertViewList
 	
 	private void addListeners()
 	{
-		mConfirmButton.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				MainActivity.getInstance().getContent().recordScore(false);
-				MainActivity.getInstance().getContent().resetToReady();
-			}
-		});
+//		mConfirmButton.setOnClickListener(new View.OnClickListener()
+//		{
+//			@Override
+//			public void onClick(View v)
+//			{
+////				MainActivity.getInstance().getContent().recordScore(false);
+//				MainActivity.getInstance().getContent().resetToReady();
+//			}
+//		});
 		
 		mAdd2Button.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				MainActivity.getInstance().getContent().recordScore(true);
+				MainActivity.getInstance().getContent().markAsAdd2();
 				MainActivity.getInstance().getContent().resetToReady();
 			}
 		});
