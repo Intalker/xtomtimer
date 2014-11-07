@@ -21,7 +21,12 @@ public class SessionOverlapView extends RelativeLayout
 		ArrayList<ScoreData> scoreList = sessionData.getScoreList();
 		for (int i = 0; i < scoreList.size(); ++i)
 		{
-			this.addView(new ScoreView(getContext(), scoreList.get(i)));
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			lp.leftMargin = i * 30;
+			lp.topMargin = i * 10;
+			this.addView(new ScoreView(getContext(), scoreList.get(i)), lp);
 		}
 	}
 }

@@ -50,15 +50,17 @@ public class TimerContent extends RelativeLayout
 	private SpecTextView mTickTextView = null;
 
 	private FinishButtonList mFinishButtonList = null;
-	
+
 	private ScramblePanel mScramblePanel = null;
 
 	private boolean mHasPressedLongEnough = false;
-	
+
 	private SessionOverlapView mCurSessionPanel = null;
-	
+
 	private SessionData mCurSessionData = null;
 	private ScoreData mCurScoreData = null;
+
+	private float mCurTickingValue = 0f;
 
 	public TimerContent(Context context)
 	{
@@ -67,7 +69,7 @@ public class TimerContent extends RelativeLayout
 		createTimer();
 
 		addListeners();
-		
+
 		mCurSessionData = new SessionData();
 	}
 
@@ -75,7 +77,7 @@ public class TimerContent extends RelativeLayout
 	{
 		mCurSessionPanel = new SessionOverlapView(context);
 		this.addView(mCurSessionPanel);
-		
+
 		mTickTextView = new SpecTextView(context);
 		mTickTextView.setText(R.string.ready);
 		mTickTextView.setTextSize(72.0f);
@@ -91,10 +93,11 @@ public class TimerContent extends RelativeLayout
 				RelativeLayout.LayoutParams.MATCH_PARENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		finishButtonLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		finishButtonLP.bottomMargin = LayoutConfig.getFinishButtonListBottomMargin();
+		finishButtonLP.bottomMargin = LayoutConfig
+				.getFinishButtonListBottomMargin();
 		this.addView(mFinishButtonList, finishButtonLP);
 		mFinishButtonList.setVisibility(View.GONE);
-		
+
 		mScramblePanel = new ScramblePanel(context);
 		RelativeLayout.LayoutParams scramblePanelLP = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -120,19 +123,19 @@ public class TimerContent extends RelativeLayout
 								startReadyTiming();
 								break;
 							case STATUS_RUNNING:
-//								mCurrentStatus = STATUS_FINISHED;
-//								mTickTimer.cancel();
-//								animateScoreTextView(mTickTextView.getY(),
-//										LayoutConfig.getScoreFinishTopMargin(),
-//										96f, false);
+								// mCurrentStatus = STATUS_FINISHED;
+								// mTickTimer.cancel();
+								// animateScoreTextView(mTickTextView.getY(),
+								// LayoutConfig.getScoreFinishTopMargin(),
+								// 96f, false);
 								finishCurTicking();
 								break;
 							case STATUS_FINISHED:
-//								float fromY = mTickTextView.getY();
-//								float toY = LayoutConfig
-//										.getScoreReadyTopMargin();
-//								animateScoreTextView(fromY, toY, 72f, true);
-//								mCurrentStatus = STATUS_RESET;
+								// float fromY = mTickTextView.getY();
+								// float toY = LayoutConfig
+								// .getScoreReadyTopMargin();
+								// animateScoreTextView(fromY, toY, 72f, true);
+								// mCurrentStatus = STATUS_RESET;
 								resetToReady();
 								break;
 							case STATUS_RESET:
@@ -162,7 +165,7 @@ public class TimerContent extends RelativeLayout
 							case STATUS_FINISHED:
 								break;
 							case STATUS_RESET:
-//								mCurrentStatus = STATUS_READY;
+								// mCurrentStatus = STATUS_READY;
 								break;
 							default:
 								break;
@@ -187,10 +190,15 @@ public class TimerContent extends RelativeLayout
 				switch (msg.arg1)
 				{
 					case MSG_TICKINGTIMER:
-						long millisec = System.currentTimeMillis() - mStartTime;
-						float timeInSec = millisec * 0.001f;
-						// mTickTextView.setTextColor(ColorUtil.generateRandomColor());
-						mTickTextView.setText(tickFormat.format(timeInSec));
+						if (mCurrentStatus == STATUS_RUNNING)
+						{
+							long millisec = System.currentTimeMillis()
+									- mStartTime;
+							float timeInSec = millisec * 0.001f;
+							// mTickTextView.setTextColor(ColorUtil.generateRandomColor());
+							mTickTextView.setText(tickFormat.format(timeInSec));
+							mCurTickingValue = timeInSec;
+						}
 						break;
 					case MSG_READYTIMER:
 						mTickTextView.setTextColor(ColorConfig
@@ -221,7 +229,7 @@ public class TimerContent extends RelativeLayout
 		mStartTime = System.currentTimeMillis();
 		mTickTimer.schedule(mTimerTask, 0, 1);
 		mTickTextView.setTextColor(ColorConfig.getTickColorRunning());
-		
+
 		AnimationUtil.fadeOutFinishButtons(mScramblePanel);
 	}
 
@@ -323,7 +331,8 @@ public class TimerContent extends RelativeLayout
 							mTickTextView.setText(R.string.ready);
 							ValueAnimator alphaAnimation = ValueAnimator
 									.ofFloat(0f, 1f);
-							alphaAnimation.setDuration(TimeConfig.getFadeAnimDuration());
+							alphaAnimation.setDuration(TimeConfig
+									.getFadeAnimDuration());
 							alphaAnimation
 									.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
 									{
@@ -398,30 +407,28 @@ public class TimerContent extends RelativeLayout
 		animationSet.start();
 
 	}
-	
+
 	public void resetToReady()
 	{
 		float fromY = mTickTextView.getY();
-		float toY = LayoutConfig
-				.getScoreReadyTopMargin();
+		float toY = LayoutConfig.getScoreReadyTopMargin();
 		animateScoreTextView(fromY, toY, 72f, true);
 		mCurrentStatus = STATUS_READY;
 	}
-	
+
 	public void finishCurTicking()
 	{
-		float score = Float.parseFloat(mTickTextView.getText().toString());
+		// float score = Float.parseFloat(mTickTextView.getText().toString());
 		String scramble = mScramblePanel.getScrambleStr();
-		mCurScoreData = new ScoreData(score, scramble);
+		mCurScoreData = new ScoreData(mCurTickingValue, scramble);
 		mCurrentStatus = STATUS_FINISHED;
 		mTickTimer.cancel();
 		animateScoreTextView(mTickTextView.getY(),
-				LayoutConfig.getScoreFinishTopMargin(),
-				96f, false);
-		
+				LayoutConfig.getScoreFinishTopMargin(), 96f, false);
+		recordScore(false);
 		mCurSessionPanel.updateView(mCurSessionData);
 	}
-	
+
 	public void recordScore(boolean add2)
 	{
 		if (null != mCurScoreData)
