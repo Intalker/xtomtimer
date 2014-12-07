@@ -14,6 +14,8 @@ public class LayoutConfig {
 	
 	private static int finishButtonListBottomMargin = -1;
 	
+	private static int bottomADAreaHeight = -1;
+	
 	public static int getSmallMargin() {
 		if(smallMargin < 0) {
 			smallMargin = DensityAdaptor.getDensityIndependentValue(2);
@@ -54,5 +56,13 @@ public class LayoutConfig {
 			finishButtonListBottomMargin = DensityAdaptor.getDensityIndependentValue(48);
 		}
 		return finishButtonListBottomMargin;
+	}
+	
+	//bottomADAreaHeight
+	public static int getBottomADAreaHeight() {
+		if(bottomADAreaHeight < 0) {
+			bottomADAreaHeight = DensityAdaptor.getDensityIndependentValue(72);
+		}
+		return bottomADAreaHeight;
 	}
 }

@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 @SuppressLint("ClickableViewAccessibility")
@@ -52,6 +53,8 @@ public class TimerContent extends RelativeLayout
 	private FinishButtonList mFinishButtonList = null;
 
 	private ScramblePanel mScramblePanel = null;
+	
+	private BottomADPanel mBottomADPanel = null;
 
 	private boolean mHasPressedLongEnough = false;
 
@@ -83,13 +86,19 @@ public class TimerContent extends RelativeLayout
 		tickLP.topMargin = LayoutConfig.getScoreReadyTopMargin();
 		this.addView(mTickTextView, tickLP);
 
+		mBottomADPanel = new BottomADPanel(context);
+		RelativeLayout.LayoutParams adPanelLP = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, LayoutConfig.getBottomADAreaHeight());
+		adPanelLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+
+		this.addView(mBottomADPanel, adPanelLP);
+		
 		mFinishButtonList = new FinishButtonList(context);
 		RelativeLayout.LayoutParams finishButtonLP = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		finishButtonLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		finishButtonLP.bottomMargin = LayoutConfig
-				.getFinishButtonListBottomMargin();
+				.getBottomADAreaHeight();
 		this.addView(mFinishButtonList, finishButtonLP);
 		mFinishButtonList.setVisibility(View.GONE);
 

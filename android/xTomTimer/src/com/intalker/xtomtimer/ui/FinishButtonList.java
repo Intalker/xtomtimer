@@ -23,6 +23,7 @@ public class FinishButtonList extends AnimVertViewList
 
 	private void createButtons(Context context)
 	{
+//		this.setBackgroundColor(ColorUtil.generateRandomColor());
 //		mConfirmButton = new SimpleButton(context);
 //		mConfirmButton.setText(R.string.confirm);
 //		this.appendView(mConfirmButton, true);
