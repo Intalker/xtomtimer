@@ -44,7 +44,7 @@ public class LayoutConfig {
 	
 	public static int getScoreFinishTopMargin() {
 		if(scoreFinishTopMargin < 0) {
-			scoreFinishTopMargin = DensityAdaptor.getDensityIndependentValue(64);
+			scoreFinishTopMargin = DensityAdaptor.getScreenHeight() / 5 * 2;//DensityAdaptor.getDensityIndependentValue(64);
 		}
 		return scoreFinishTopMargin;
 	}

@@ -10,7 +10,6 @@ import com.intalker.xtomtimer.R;
 
 public class FinishButtonList extends AnimVertViewList
 {
-	private SimpleButton mConfirmButton = null;
 	private SimpleButton mAdd2Button = null;
 	private SimpleButton mTryAgainButton = null;
 	private SimpleButton mDNFutton = null;

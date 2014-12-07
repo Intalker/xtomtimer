@@ -5,7 +5,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.intalker.util.DensityAdaptor;
-import com.intalker.widget.FlowLayout;
 import com.intalker.widget.SpecTextView;
 import com.intalker.xtomtimer.AnimationUtil;
 import com.intalker.xtomtimer.R;
@@ -56,8 +55,6 @@ public class TimerContent extends RelativeLayout
 
 	private boolean mHasPressedLongEnough = false;
 
-	private SessionOverView mCurSessionPanel = null;
-
 	private SessionData mCurSessionData = null;
 	private ScoreData mCurScoreData = null;
 
@@ -76,15 +73,6 @@ public class TimerContent extends RelativeLayout
 
 	private void createUI(Context context)
 	{
-		mCurSessionPanel = new SessionOverView(context);
-		RelativeLayout.LayoutParams sessionPanelLP = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.MATCH_PARENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		sessionPanelLP.leftMargin = sessionPanelLP.rightMargin = sessionPanelLP.topMargin = LayoutConfig
-				.getLargeMargin();
-		this.addView(mCurSessionPanel, sessionPanelLP);
-		mCurSessionPanel.setVisibility(View.GONE);
-
 		mTickTextView = new SpecTextView(context);
 		mTickTextView.setText(R.string.ready);
 		mTickTextView.setTextSize(72.0f);
@@ -303,7 +291,6 @@ public class TimerContent extends RelativeLayout
 		if (reset)
 		{
 			AnimationUtil.fadeOutFinishButtons(mFinishButtonList);
-			AnimationUtil.fadeOutFinishButtons(mCurSessionPanel);
 			animationSet.addListener(new AnimatorListener()
 			{
 
@@ -403,7 +390,6 @@ public class TimerContent extends RelativeLayout
 				public void onAnimationEnd(Animator animation)
 				{
 					AnimationUtil.fadeInFinishButtons(mFinishButtonList);
-					AnimationUtil.fadeInFinishButtons(mCurSessionPanel);
 				}
 
 				@Override
@@ -439,10 +425,11 @@ public class TimerContent extends RelativeLayout
 		mCurScoreData = new ScoreData(mCurTickingValue, scramble);
 		mCurrentStatus = STATUS_FINISHED;
 		mTickTimer.cancel();
+		
+		recordScore();
+
 		animateScoreTextView(mTickTextView.getY(),
 				LayoutConfig.getScoreFinishTopMargin(), 96f, false);
-		recordScore();
-		mCurSessionPanel.updateView(mCurSessionData);
 	}
 	
 	public void markAsAdd2()
