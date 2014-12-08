@@ -23,11 +23,6 @@ public class FinishButtonList extends AnimVertViewList
 
 	private void createButtons(Context context)
 	{
-//		this.setBackgroundColor(ColorUtil.generateRandomColor());
-//		mConfirmButton = new SimpleButton(context);
-//		mConfirmButton.setText(R.string.confirm);
-//		this.appendView(mConfirmButton, true);
-		
 		mAdd2Button = new SimpleButton(context);
 		mAdd2Button.setText(R.string.add2);
 		this.appendView(mAdd2Button, true);
@@ -42,21 +37,11 @@ public class FinishButtonList extends AnimVertViewList
 		
 		mDiscardButton = new SimpleButton(context);
 		mDiscardButton.setText(R.string.discard);
-		this.appendView(mDiscardButton, false);
+		this.appendView(mDiscardButton, true);
 	}
 	
 	private void addListeners()
 	{
-//		mConfirmButton.setOnClickListener(new View.OnClickListener()
-//		{
-//			@Override
-//			public void onClick(View v)
-//			{
-////				MainActivity.getInstance().getContent().recordScore(false);
-//				MainActivity.getInstance().getContent().resetToReady();
-//			}
-//		});
-		
 		mAdd2Button.setOnClickListener(new View.OnClickListener()
 		{
 			@Override

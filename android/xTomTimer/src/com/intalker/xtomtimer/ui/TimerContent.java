@@ -6,6 +6,7 @@ import java.util.TimerTask;
 
 import com.intalker.util.DensityAdaptor;
 import com.intalker.widget.SpecTextView;
+import com.intalker.widget.bar.BarSetScrollView;
 import com.intalker.xtomtimer.AnimationUtil;
 import com.intalker.xtomtimer.R;
 import com.intalker.xtomtimer.config.ColorConfig;
@@ -24,7 +25,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 @SuppressLint("ClickableViewAccessibility")
@@ -60,6 +60,8 @@ public class TimerContent extends RelativeLayout
 
 	private SessionData mCurSessionData = null;
 	private ScoreData mCurScoreData = null;
+	
+	private BarSetScrollView mBarSetScrollView = null;
 
 	private float mCurTickingValue = 0f;
 
@@ -89,8 +91,8 @@ public class TimerContent extends RelativeLayout
 		mBottomADPanel = new BottomADPanel(context);
 		RelativeLayout.LayoutParams adPanelLP = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, LayoutConfig.getBottomADAreaHeight());
 		adPanelLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-
 		this.addView(mBottomADPanel, adPanelLP);
+		mBottomADPanel.setVisibility(View.GONE);
 		
 		mFinishButtonList = new FinishButtonList(context);
 		RelativeLayout.LayoutParams finishButtonLP = new RelativeLayout.LayoutParams(
@@ -115,6 +117,10 @@ public class TimerContent extends RelativeLayout
 //			fl.addView(new ScoreView(context, new ScoreData(i, "")));
 //		}
 //		this.addView(fl);
+		
+		// Score View
+		mBarSetScrollView = new BarSetScrollView(context);
+		this.addView(mBarSetScrollView);
 	}
 
 	private void addListeners()
@@ -300,6 +306,7 @@ public class TimerContent extends RelativeLayout
 		if (reset)
 		{
 			AnimationUtil.fadeOutFinishButtons(mFinishButtonList);
+			AnimationUtil.fadeOutFinishButtons(mBottomADPanel);
 			animationSet.addListener(new AnimatorListener()
 			{
 
@@ -399,6 +406,7 @@ public class TimerContent extends RelativeLayout
 				public void onAnimationEnd(Animator animation)
 				{
 					AnimationUtil.fadeInFinishButtons(mFinishButtonList);
+					AnimationUtil.fadeInFinishButtons(mBottomADPanel);
 				}
 
 				@Override

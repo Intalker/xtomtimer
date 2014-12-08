@@ -1,6 +1,6 @@
 package com.intalker.xtomtimer.ui;
 
-import com.intalker.util.ColorUtil;
+//import com.intalker.util.ColorUtil;
 import com.intalker.widget.SpecTextView;
 import android.content.Context;
 import android.widget.RelativeLayout;
@@ -17,7 +17,7 @@ public class BottomADPanel extends RelativeLayout
 
 	private void createUI(Context context)
 	{
-		this.setBackgroundColor(ColorUtil.generateRandomColor());
+//		this.setBackgroundColor(ColorUtil.generateRandomColor());
 		
 		mTextView = new SpecTextView(context);
 		mTextView.setText("AD area");
