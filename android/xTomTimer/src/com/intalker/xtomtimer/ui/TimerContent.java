@@ -121,6 +121,7 @@ public class TimerContent extends RelativeLayout
 		// Score View
 		mBarSetScrollView = new BarSetScrollView(context);
 		this.addView(mBarSetScrollView);
+		mBarSetScrollView.setVisibility(View.GONE);
 	}
 
 	private void addListeners()
@@ -305,6 +306,7 @@ public class TimerContent extends RelativeLayout
 
 		if (reset)
 		{
+			AnimationUtil.fadeOutFinishButtons(mBarSetScrollView);
 			AnimationUtil.fadeOutFinishButtons(mFinishButtonList);
 			AnimationUtil.fadeOutFinishButtons(mBottomADPanel);
 			animationSet.addListener(new AnimatorListener()
@@ -405,6 +407,8 @@ public class TimerContent extends RelativeLayout
 				@Override
 				public void onAnimationEnd(Animator animation)
 				{
+					mBarSetScrollView.scrollToEnd();
+					AnimationUtil.fadeInFinishButtons(mBarSetScrollView);
 					AnimationUtil.fadeInFinishButtons(mFinishButtonList);
 					AnimationUtil.fadeInFinishButtons(mBottomADPanel);
 				}
@@ -462,6 +466,7 @@ public class TimerContent extends RelativeLayout
 		if (null != mCurScoreData)
 		{
 			mCurSessionData.addScore(mCurScoreData);
+			mBarSetScrollView.update(mCurSessionData);
 		}
 	}
 }

@@ -1,12 +1,13 @@
 package com.intalker.widget.bar;
 
-import com.intalker.util.ColorUtil;
-import com.intalker.util.DensityAdaptor;
+import java.text.DecimalFormat;
+
 import com.intalker.widget.SpecTextView;
 import com.intalker.widget.VerticalSpecTextView;
+import com.intalker.xtomtimer.R;
 import com.intalker.xtomtimer.config.LayoutConfig;
-
 import android.content.Context;
+import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -14,10 +15,19 @@ public class BarView extends RelativeLayout
 {
 	private RelativeLayout mDarkenView = null;
 	private SpecTextView mLabel = null;
-	public BarView(Context context)
+	
+	private DecimalFormat valueFormat = new DecimalFormat("##0.000");
+	
+	private final static int maxHeight = LayoutConfig.getMaxBarHeight();
+	private float mMin = -1f;
+	private float mMax = -1f;
+	private float mValue = -1f;
+	
+	public BarView(Context context, float max, float min, float value)
 	{
 		super(context);
 		createUI(context);
+		setValue(max, min, value);
 	}
 	
 	private void createUI(Context context)
@@ -28,10 +38,10 @@ public class BarView extends RelativeLayout
 		
 		mDarkenView = new RelativeLayout(context);
 		//mDarkenView.setBackgroundResource(R.drawable.roundcorner_bg);
-		mDarkenView.setBackgroundColor(ColorUtil.generateRandomColor());//Color.LTGRAY);
+		//mDarkenView.setBackgroundColor(Color.LTGRAY);
+		mDarkenView.setBackgroundResource(R.drawable.bar_bg);
 		RelativeLayout.LayoutParams darkenLP = new RelativeLayout.LayoutParams(
-				LayoutConfig.getBarWidth(),
-				DensityAdaptor.getDensityIndependentValue(100));//RelativeLayout.LayoutParams.WRAP_CONTENT);
+				LayoutConfig.getBarWidth(), 0);//RelativeLayout.LayoutParams.WRAP_CONTENT);
 		darkenLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		this.addView(mDarkenView, darkenLP);
 		
@@ -44,6 +54,19 @@ public class BarView extends RelativeLayout
 		labelLP.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		this.addView(mLabel, labelLP);
 		mLabel.setTextSize(12f);
-		mLabel.setText("12.3456789");
+//		mLabel.setText("12.3456789");
 	}
+	
+	private void setValue(float max, float min, float value)
+	{
+		mMax = max;
+		mMin = min;
+		mValue = value;
+		
+		RelativeLayout.LayoutParams barLP = (LayoutParams) mDarkenView.getLayoutParams();
+		barLP.height = (int) (maxHeight * mValue / mMax);
+		mLabel.setText(valueFormat.format(value));
+	}
+	
+	
 }

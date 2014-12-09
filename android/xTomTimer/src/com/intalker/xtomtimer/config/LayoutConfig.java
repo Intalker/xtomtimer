@@ -19,6 +19,8 @@ public class LayoutConfig
 
 	private static int barWidth = -1;
 	private static int scorePanelHeight = -1;
+	
+	private static int maxBarHeight = -1;
 
 	public static int getSmallMargin()
 	{
@@ -100,5 +102,14 @@ public class LayoutConfig
 			scorePanelHeight = DensityAdaptor.getScreenHeight() / 5;
 		}
 		return scorePanelHeight;
+	}
+
+	public static int getMaxBarHeight()
+	{
+		if (maxBarHeight < 0)
+		{
+			maxBarHeight = DensityAdaptor.getDensityIndependentValue(100);
+		}
+		return maxBarHeight;
 	}
 }
